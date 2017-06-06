@@ -1,3 +1,4 @@
+package no.nrk.model;
 /**
  * A simple POJO with getters
  */
