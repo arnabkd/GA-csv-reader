@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 /**
- * Created as part of
+ * 
  */
 public class Main {
     

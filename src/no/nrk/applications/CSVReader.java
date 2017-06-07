@@ -9,7 +9,8 @@ import java.time.ZoneId;
 import java.util.stream.Stream;
 
 /**
- * Created as part of
+ * Basic CSV reader with primitive listener pattern (ish).
+ * Call EpisodeAnalysisModule#addViewingRow(...) everytime we process a CSV line.
  */
 public class CSVReader {
     
