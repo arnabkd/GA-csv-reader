@@ -1,44 +1,78 @@
 package no.nrk.applications;
 
-import no.nrk.model.ProgramViewership;
-
 import java.time.DayOfWeek;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * 
- */
-public class EpisodeAnalysisModule {
 
-    private static final String DELIMITER = ",";
+public class EpisodeAnalysisModule implements EpisodeAnalysis, EpisodeDataStore {
     
-    private Map<String, Integer> episodeViews = new HashMap<>();
-    private Map<DayOfWeek, Integer> programViewsPerDay = new HashMap<>();
+    /* Totalt antall visninger av hver episode (for hele perioden) */
+    Map<String, Long> viewsPerEpisode = new HashMap<>();
     
-    private int numDaysWithViews = 0;
-    private int totalProgramViews = 0;
+    /* Gjennomsnittlig antall visninger per ukedag */
+    Map<DayOfWeek, Integer> numWeekdays = new HashMap<>();
+    Map<DayOfWeek, Long> numViewsWeekday = new HashMap<>();
     
-
-    private ProgramViewership fromLine(String line) {
-        List<String> vals = Arrays.asList(line.split(DELIMITER));
-        return new ProgramViewership(vals.get(0), vals.get(1), 
-                Long.parseLong(vals.get(2)), Long.parseLong(vals.get(3)));
+    /* Gjennomsnittlig antall visninger per time */
+    long numHours = 0L;
+    long numViews = 0L;
+    
+    /* Antall visninger per dato (for hele perioden) */
+    Map<String, Long> numViewsDate = new HashMap<>();
+    
+    public EpisodeAnalysisModule(LocalDate startDate, LocalDate endDate){
+        /* Set number of occurrences of each weekday */
+        List<LocalDate> dates = getDays(startDate, endDate);
+        dates.forEach(date -> numWeekdays.compute(date.getDayOfWeek(), (k, v) -> v == null ? 1 : v + 1));
+        
+        numHours = dates.size() * 24;
     }
-    
-    public int getTotalViewsForEpisode(String programId){
-        if (!episodeViews.containsKey(programId)){
-            throw new IllegalArgumentException(String.format("ProgramId: %s not found",programId));
-        }else {
-            return episodeViews.get(programId);
+
+    private List<LocalDate> getDays(LocalDate startDate, LocalDate endDate) {
+        int days =  (int) startDate.until(endDate, ChronoUnit.DAYS);
+        return Stream.iterate(startDate, d -> d.plusDays(1))
+                .limit(days)
+                .collect(Collectors.toList());
+    }
+
+    public long getProgramViewsFor(LocalDate date) {
+        System.out.println("date in map?" + numViewsDate.containsKey(date));
+        return numViewsDate.get(date);
+    }
+
+    public double getAverageViewsFor(DayOfWeek dayOfWeek) {
+        System.out.println("Showing average views for day: " + dayOfWeek.name());
+        return ((double) numViewsWeekday.get(dayOfWeek))/numWeekdays.get(dayOfWeek);
+    }
+
+    public double getAverageViewsPerHour() {
+        System.out.println("Showing average views per hour: ");
+        return ((double)numViews)/numHours;
+    }
+
+    public long getTotalViewsFor(String episodeId) {
+        System.out.println("Showing total views for episode: " + episodeId);
+        if (viewsPerEpisode.containsKey(episodeId)){
+            return viewsPerEpisode.get(episodeId);
         }
+        throw new IllegalArgumentException(String.format
+                ("Episode with episodeId: %s not found", episodeId));
     }
-    
-    public double getAverageProgramViewsPerDay(){
-        return ((double) numDaysWithViews) / totalProgramViews;
+
+    public void addViewing(String episodeId, LocalDate date) {
+        numViews++;
+        
+        numViewsDate.compute(date.toString(), (k, v) -> v == null ? 1 : v + 1);
+        
+        viewsPerEpisode.compute(episodeId, (k, v) -> v == null? 1 : v + 1);
+        
+        numViewsWeekday.compute(date.getDayOfWeek(), (k, v) -> v == null? 1 : v + 1);
     }
-    
-    
+
 }
