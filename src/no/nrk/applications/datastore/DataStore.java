@@ -1,4 +1,4 @@
-package no.nrk.applications;
+package no.nrk.applications.datastore;
 
 import java.time.LocalDate;
 

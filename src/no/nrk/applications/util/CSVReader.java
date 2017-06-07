@@ -1,4 +1,6 @@
-package no.nrk.applications;
+package no.nrk.applications.util;
+
+import no.nrk.applications.datastore.ProgramViewershipDataStore;
 
 import java.io.IOException;
 import java.nio.file.Files;

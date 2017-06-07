@@ -1,4 +1,6 @@
-package no.nrk.applications;
+package no.nrk.applications.module;
+
+import no.nrk.applications.datastore.ProgramViewershipDataStore;
 
 import java.time.DayOfWeek;
 import java.util.Arrays;

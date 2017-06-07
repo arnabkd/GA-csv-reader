@@ -1,8 +1,8 @@
 package no.nrk;
 
-import no.nrk.applications.CSVReader;
-import no.nrk.applications.ProgramStatisticsModule;
-import no.nrk.applications.ProgramViewershipDataStore;
+import no.nrk.applications.util.CSVReader;
+import no.nrk.applications.module.ProgramStatisticsModule;
+import no.nrk.applications.datastore.ProgramViewershipDataStore;
 
 import java.io.IOException;
 import java.time.LocalDate;
