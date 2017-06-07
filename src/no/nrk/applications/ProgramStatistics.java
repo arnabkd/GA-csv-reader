@@ -1,7 +1,5 @@
 package no.nrk.applications;
 
-import java.time.LocalDate;
-
 public interface ProgramStatistics {
 
     /**
@@ -24,12 +22,5 @@ public interface ProgramStatistics {
      * Show total number of views per day
      */
     void showViewsPerDay();
-
-    /**
-     * Add an entry to the module
-     * @param episodeId
-     * @param date
-     */
-    void addViewing(String episodeId, LocalDate date);
     
 }
