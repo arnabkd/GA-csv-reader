@@ -3,7 +3,7 @@ package no.nrk.applications.datastore;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,12 +87,12 @@ public class ProgramViewershipDataStore implements DataStore {
                 ("Episode with episodeId: %s not found", episodeId));
     }
 
-    public Collection<String> getEpisodes() {
-        return viewsPerEpisode.keySet();
+    public List<String> getEpisodes() {
+        return new ArrayList<>(viewsPerEpisode.keySet());
     }
     
-    public Collection<LocalDate> getAllDates() {
-        return numViewsForDate.keySet();
+    public List<LocalDate> getAllDates() {
+        return new ArrayList<>(numViewsForDate.keySet());
     }
     
 }
