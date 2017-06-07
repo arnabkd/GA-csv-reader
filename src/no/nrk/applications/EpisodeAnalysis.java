@@ -1,42 +1,35 @@
 package no.nrk.applications;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public interface EpisodeAnalysis {
 
     /**
-     * Get total program views for this date
-     * @param date
-     * @return
+     * Show number of views (on average) per day of week
      */
-    long getProgramViewsFor(LocalDate date);
+    void showWeekDayStatistics();
 
     /**
-     * Get average program views for Monday / Tuesday / Wednesday etc
-     * @param dayOfWeek
-     * @return
+     * Show number of views per episode
      */
-    double getAverageViewsFor(DayOfWeek dayOfWeek);
-
-    /**
-     * Get total views for an episode
-     * @param episodeId
-     * @return
-     */
-    long getTotalViewsFor(String episodeId);
-
-    /**
-     * Get average program viewings per hour
-     * @return
-     */
-    double getAverageViewsPerHour();
+    void showEpisodeStatistics();
 
 
     /**
-     * 
+     * Show number of program views every hour
+     */
+    void showHourlyStatistics();
+
+    /**
+     * Show total number of views per day
+     */
+    void showViewsPerDay();
+
+    /**
+     * Add an entry to the module
      * @param episodeId
      * @param date
      */
     void addViewing(String episodeId, LocalDate date);
+    
 }

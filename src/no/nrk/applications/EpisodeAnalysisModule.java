@@ -3,6 +3,7 @@ package no.nrk.applications;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,8 @@ import java.util.stream.Stream;
 
 
 /**
- * Note: Primitive solution.
- * Better solution would be to use Google BigQuery to import/export CSV
+ * Note: A better solution would be to use Google BigQuery to import from CSV and 
+ * then construct queries for each statistic
  */
 public class EpisodeAnalysisModule implements EpisodeAnalysis {
     
@@ -45,23 +46,19 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis {
                 .collect(Collectors.toList());
     }
 
-    public long getProgramViewsFor(LocalDate date) {
-        System.out.println("Showing program views for "+ date.toString());
+    private long getProgramViewsFor(LocalDate date) {
         return numViewsForDate.get(date);
     }
 
-    public double getAverageViewsFor(DayOfWeek dayOfWeek) {
-        System.out.println("Showing average views for day: " + dayOfWeek.name());
+    private double getAverageViewsFor(DayOfWeek dayOfWeek) {
         return ((double) numViewsWeekday.get(dayOfWeek))/numWeekdays.get(dayOfWeek);
     }
 
-    public double getAverageViewsPerHour() {
-        System.out.println("Showing average views per hour: ");
+    private double getAverageViewsPerHour() {
         return ((double)numViews)/numHours;
     }
 
-    public long getTotalViewsFor(String episodeId) {
-        System.out.println("Showing total views for episode: " + episodeId);
+    private long getTotalViewsFor(String episodeId) {
         if (viewsPerEpisode.containsKey(episodeId)){
             return viewsPerEpisode.get(episodeId);
         }
@@ -69,6 +66,37 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis {
                 ("Episode with episodeId: %s not found", episodeId));
     }
     
+    public void showWeekDayStatistics() {
+        System.out.println("**** Weekday statistics *****");
+        Arrays.asList(DayOfWeek.values()).forEach(weekday -> 
+                System.out.println(
+                        String.format("Average views for %ss : %s", weekday.name().toLowerCase(), getAverageViewsFor(weekday))));
+        System.out.println("*****************************\n");
+
+    }
+    
+    public void showEpisodeStatistics() {
+        System.out.println("**** Episode statistics *****");
+        viewsPerEpisode.keySet().forEach(episode -> 
+                System.out.println(String.format
+                        ("Number of views for episode %s: %d", episode, getTotalViewsFor(episode))));
+        System.out.println("*****************************\n");
+    }
+
+    public void showHourlyStatistics() {
+        System.out.println("**** Hourly statistics *****");
+        System.out.println("Average unique viewings every hour: " + getAverageViewsPerHour());
+        System.out.println("*****************************\n");
+    }
+
+    public void showViewsPerDay() {
+        System.out.println("**** Daily statistics *****");
+        numViewsForDate.keySet().forEach(day ->
+                System.out.println(String.format
+                        ("Number of unique views on %s: %d", day, getProgramViewsFor(day))));
+        System.out.println("*****************************\n");
+    }
+
     public void addViewing(String episodeId, LocalDate date) {
         numViews++;
         viewsPerEpisode.compute(episodeId, (k, v) -> v == null? 1 : v + 1);

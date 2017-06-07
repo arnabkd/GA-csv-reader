@@ -3,9 +3,8 @@ package no.nrk;
 import no.nrk.applications.CSVReader;
 import no.nrk.applications.EpisodeAnalysisModule;
 
-import java.time.DayOfWeek;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
 
 /**
  * 
@@ -20,15 +19,18 @@ public class Main {
 
 
         EpisodeAnalysisModule analysisModule = new EpisodeAnalysisModule(start, end);
-        CSVReader episodeAnalysis = new CSVReader(fileName, delimiter, analysisModule);
-        
-        
-        System.out.println(analysisModule.getTotalViewsFor("KMTE20000214"));
-        System.out.println(analysisModule.getAverageViewsPerHour());
-        
-        Arrays.asList(DayOfWeek.values()).forEach(day -> System.out.println(analysisModule.getAverageViewsFor(day)));
-        
-        
-        System.out.println(analysisModule.getProgramViewsFor(LocalDate.of(2015, 12, 15)));
+        CSVReader csvReader = new CSVReader();
+        try {
+            csvReader.readFileToModule(fileName, delimiter, analysisModule);
+            
+            analysisModule.showEpisodeStatistics();
+            analysisModule.showWeekDayStatistics();
+            analysisModule.showHourlyStatistics();
+            analysisModule.showViewsPerDay();
+            
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+     
     }
 }

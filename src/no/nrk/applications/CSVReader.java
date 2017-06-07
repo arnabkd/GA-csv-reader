@@ -14,12 +14,12 @@ import java.util.stream.Stream;
  */
 public class CSVReader {
     
-    public CSVReader(String fileName, String delimiter, EpisodeAnalysisModule analysisModule){
+    public void readFileToModule(String fileName, String delimiter, EpisodeAnalysisModule analysisModule) throws IOException {
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.skip(1).forEach(line -> processLine(line, delimiter, analysisModule));
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-        }
+        } 
     }
 
     private void processLine(String line, String delimiter, EpisodeAnalysisModule analysisModule) {
