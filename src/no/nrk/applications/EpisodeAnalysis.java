@@ -7,12 +7,10 @@ public interface EpisodeAnalysis {
 
     /**
      * Get total program views for this date
-     * @param year
-     * @param month
-     * @param day
+     * @param date
      * @return
      */
-    long getProgramViewsFor(int year, int month, int day);
+    long getProgramViewsFor(LocalDate date);
 
     /**
      * Get average program views for Monday / Tuesday / Wednesday etc

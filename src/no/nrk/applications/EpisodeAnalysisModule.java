@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * Note: Primitive solution.
+ * Better solution would be to use Google BigQuery to import/export CSV
+ */
 public class EpisodeAnalysisModule implements EpisodeAnalysis {
     
     /* Totalt antall visninger av hver episode (for hele perioden) */
@@ -23,7 +27,8 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis {
     long numHours = 0L;
     long numViews = 0L;
     
-
+    Map<LocalDate, Long> numViewsForDate = new HashMap<>();
+    
     
     public EpisodeAnalysisModule(LocalDate startDate, LocalDate endDate){
         /* Set number of occurrences of each weekday */
@@ -40,8 +45,9 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis {
                 .collect(Collectors.toList());
     }
 
-    public long getProgramViewsFor(int year, int month, int day) {
-        throw new UnsupportedOperationException();
+    public long getProgramViewsFor(LocalDate date) {
+        System.out.println("Showing program views for "+ date.toString());
+        return numViewsForDate.get(date);
     }
 
     public double getAverageViewsFor(DayOfWeek dayOfWeek) {
@@ -65,10 +71,9 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis {
     
     public void addViewing(String episodeId, LocalDate date) {
         numViews++;
-        
         viewsPerEpisode.compute(episodeId, (k, v) -> v == null? 1 : v + 1);
-        
         numViewsWeekday.compute(date.getDayOfWeek(), (k, v) -> v == null? 1 : v + 1);
+        numViewsForDate.compute(date, (k, v) -> v == null? 1 : v + 1);
     }
 
 }

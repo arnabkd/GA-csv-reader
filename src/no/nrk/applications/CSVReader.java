@@ -3,7 +3,9 @@ package no.nrk.applications;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +31,9 @@ public class CSVReader {
     }
 
     private void process(String [] row, EpisodeAnalysisModule analysisModule){
-        analysisModule.addViewing(row[1],(LocalDate.ofEpochDay(Long.parseLong(row[2]))));
+        // Important: the epoch column is in seconds, not milliseconds
+        LocalDate date = Instant.ofEpochSecond(Long.parseLong(row[2])).atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        analysisModule.addViewing(row[1],date);
     }
 }

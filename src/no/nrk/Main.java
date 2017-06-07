@@ -5,6 +5,7 @@ import no.nrk.applications.EpisodeAnalysisModule;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * Created as part of
@@ -21,9 +22,13 @@ public class Main {
         EpisodeAnalysisModule analysisModule = new EpisodeAnalysisModule(start, end);
         CSVReader episodeAnalysis = new CSVReader(fileName, delimiter, analysisModule);
         
+        
         System.out.println(analysisModule.getTotalViewsFor("KMTE20000214"));
-        System.out.println(analysisModule.getAverageViewsFor(DayOfWeek.SATURDAY));
         System.out.println(analysisModule.getAverageViewsPerHour());
-        System.out.println(analysisModule.getProgramViewsFor(2015,12,15));
+        
+        Arrays.asList(DayOfWeek.values()).forEach(day -> System.out.println(analysisModule.getAverageViewsFor(day)));
+        
+        
+        System.out.println(analysisModule.getProgramViewsFor(LocalDate.of(2015, 12, 15)));
     }
 }
