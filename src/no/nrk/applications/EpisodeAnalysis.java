@@ -6,30 +6,39 @@ import java.time.LocalDate;
 public interface EpisodeAnalysis {
 
     /**
-     * Get total program views on a given date
-     * @param date
+     * Get total program views for this date
+     * @param year
+     * @param month
+     * @param day
      * @return
      */
-    public long getProgramViewsFor(LocalDate date);
+    long getProgramViewsFor(int year, int month, int day);
 
     /**
      * Get average program views for Monday / Tuesday / Wednesday etc
      * @param dayOfWeek
      * @return
      */
-    public double getAverageViewsFor(DayOfWeek dayOfWeek);
+    double getAverageViewsFor(DayOfWeek dayOfWeek);
 
     /**
      * Get total views for an episode
      * @param episodeId
      * @return
      */
-    public long getTotalViewsFor(String episodeId);
+    long getTotalViewsFor(String episodeId);
 
     /**
      * Get average program viewings per hour
      * @return
      */
-    public double getAverageViewsPerHour();
-    
+    double getAverageViewsPerHour();
+
+
+    /**
+     * 
+     * @param episodeId
+     * @param date
+     */
+    void addViewing(String episodeId, LocalDate date);
 }

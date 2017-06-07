@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class EpisodeAnalysisModule implements EpisodeAnalysis, EpisodeDataStore {
+public class EpisodeAnalysisModule implements EpisodeAnalysis {
     
     /* Totalt antall visninger av hver episode (for hele perioden) */
     Map<String, Long> viewsPerEpisode = new HashMap<>();
@@ -23,8 +23,7 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis, EpisodeDataStore 
     long numHours = 0L;
     long numViews = 0L;
     
-    /* Antall visninger per dato (for hele perioden) */
-    Map<String, Long> numViewsDate = new HashMap<>();
+
     
     public EpisodeAnalysisModule(LocalDate startDate, LocalDate endDate){
         /* Set number of occurrences of each weekday */
@@ -41,9 +40,8 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis, EpisodeDataStore 
                 .collect(Collectors.toList());
     }
 
-    public long getProgramViewsFor(LocalDate date) {
-        System.out.println("date in map?" + numViewsDate.containsKey(date));
-        return numViewsDate.get(date);
+    public long getProgramViewsFor(int year, int month, int day) {
+        throw new UnsupportedOperationException();
     }
 
     public double getAverageViewsFor(DayOfWeek dayOfWeek) {
@@ -64,11 +62,9 @@ public class EpisodeAnalysisModule implements EpisodeAnalysis, EpisodeDataStore 
         throw new IllegalArgumentException(String.format
                 ("Episode with episodeId: %s not found", episodeId));
     }
-
+    
     public void addViewing(String episodeId, LocalDate date) {
         numViews++;
-        
-        numViewsDate.compute(date.toString(), (k, v) -> v == null ? 1 : v + 1);
         
         viewsPerEpisode.compute(episodeId, (k, v) -> v == null? 1 : v + 1);
         
