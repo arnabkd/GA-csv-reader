@@ -2,7 +2,7 @@ package no.nrk.applications;
 
 import java.time.LocalDate;
 
-public interface EpisodeAnalysis {
+public interface ProgramStatistics {
 
     /**
      * Show number of views (on average) per day of week
